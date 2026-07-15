@@ -9,6 +9,10 @@ var MISC;
  *                   converting a category to a formatted string.
  */
 var O = {
+    delimiter: getProfileString("o", "delimiter", '\u0192'),
+    setDel: function(delimiter) {
+        this.delimiter = delimiter;
+    },
     create: function (ppn) {
         var recObj = {};
         // save format
@@ -67,7 +71,7 @@ var O = {
         if ('P' != format) MISC.format(format);
 
         if (activeWindow.windowID != myWindowId) {
-            closeWindow(myWindowId);
+            closeWindow();
         }
         return recObj;
     }
@@ -80,12 +84,14 @@ var O = {
 * wird zu
 * {
 *   "039E":
-*   {
-*      "b": ["f"],
-*      "a": ["Fortsetzung von"],
-*      "9": ["942987667"],
-*      "8": ["--Cbvz--Deutsche Zentralbücherei für Blinde zu Leipzig: DZB-Nachrichten"]
-*   }
+*   [
+*     {
+*        "b": ["f"],
+*        "a": ["Fortsetzung von"],
+*        "9": ["942987667"],
+*        "8": ["--Cbvz--Deutsche Zentralbücherei für Blinde zu Leipzig: DZB-Nachrichten"]
+*     }
+*   ]
 * }
 *
 * Zugriff: obj['039E'][9][0] --> "942987667"
@@ -108,7 +114,7 @@ O.parseField = function (field) {
         // Return empty object or handle error gracefully
         return {};
     }
-    var del = ('P' == MISC.format()) ? '\u0192' : '$';
+    var del = ('P' == MISC.format()) ? O.delimiter : '$';
     var split = arr[2].split(del);
 
     var subfield = {};
